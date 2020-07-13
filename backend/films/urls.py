@@ -22,4 +22,5 @@ router.register("films", FilmListView)
 
 urlpatterns = [
     path("docs/", schema_view.with_ui("swagger", cache_timeout=0)),
+    path("movies/", lambda request: redirect("film-list", permanent=True)),
 ] + router.urls
