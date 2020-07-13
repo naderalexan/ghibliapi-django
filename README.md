@@ -1,14 +1,14 @@
-# SENNDER HOMEWORK TASK
-![title](x-all-the-y-meme.jpg)
+# SENNDER homework task
+![get-all-the-movies](x-all-the-y-meme.jpg)
 
-### RUN
+### Run
 - `docker-compose up --build`
 - Go to `localhost:8000/movies/` or `localhost/films` 
 
-### TEST
+### Test
 `docker-compose run backend sh -c "coverage run --source '.' manage.py test && coverage report"`
 
-### NOTES
+### Notes
 - The main endpoint is `films/` and named so due to the external api using the term `films` instead of `movie` however 
 because the task description specifies that the endpoint be `movies/`, there is a redirect to `films/` from `movies/`
 - The api can be accessed directly at `localhost`, but since the task description asks for `localhost:8000` both ports 
