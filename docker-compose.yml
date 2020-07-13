@@ -1,0 +1,74 @@
+version: '3.7'
+services:
+    backend:
+        build:
+            context: .
+            dockerfile: backend/Dockerfile
+            target: backend
+        depends_on:
+            - database
+        volumes:
+            - static:/srv
+            - ./backend/films:/backend/films
+            - ./backend/manage.py:/backend/manage.py
+        env_file:
+            - envvars.env
+    database:
+        image: postgres
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_HOST_AUTH_METHOD=trust
+    nginx:
+        build:
+            context: .
+            dockerfile: proxy/Dockerfile
+        depends_on:
+            - backend
+        ports:
+            - '80:80'
+            - '8000:80'
+        restart: on-failure
+        volumes:
+            - ./proxy/conf.d:/etc/nginx/conf.d
+            - static:/srv:ro
+    celery-beat:
+        build:
+            context: .
+            dockerfile: backend/Dockerfile
+            target: celery_beat
+        volumes:
+            - ./backend/films:/backend/films
+        depends_on:
+            - rabbitmq
+            - database
+        env_file:
+            - envvars.env
+
+    rabbitmq:
+        image: rabbitmq:3-management
+        ports:
+            - '5672:5672'
+        env_file:
+            - envvars.env
+
+    worker:
+        build:
+            context: .
+            dockerfile: backend/Dockerfile
+            target: celery
+        depends_on:
+            - rabbitmq
+            - database
+        volumes:
+            - ./backend/films:/backend/films
+        env_file:
+            - envvars.env
+
+volumes:
+    static:
+    postgres-data:
+
+
+
+
