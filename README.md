@@ -9,13 +9,13 @@
 `docker-compose run backend sh -c "coverage run --source '.' manage.py test && coverage report"`
 
 ### Notes
-- The main endpoint is `films/` and named so due to the external api using the term `films` instead of `movie` however 
-because the task description specifies that the endpoint be `movies/`, there is a redirect to `films/` from `movies/`
-- The api can be accessed directly at `localhost`, but since the task description asks for `localhost:8000` both ports 
-are exposed by the backend docker container
-- When access `dict`s in the code, direct access is used for required keys and `get()` is used for non-required keys, 
-this is done on-purpose since not finding non-required keys is not a breaking error
+- Main endpoint is `films/` (named as such to align with naming in external API), however, there is a redirect from `movies/` to `films/` to abide by task description
+- API runs on port `80` for simplicity, but is `8000` is also exposed to abide by task description
+- When accessing `dict`s if the key is required, then direct access is used, otherwise, `get()`. 
+This is done on-purpose since not finding non-required keys is not a breaking error
 - Tests access the external API, and thus are slow, the other choice would have been mocking the response
+- `Black` is used for auto-formating, and runs through a PyCharm integration, however, PyCharm project settings are 
+excluded from repo
 
 ### Benchmarking using `ab` output
 Command:
